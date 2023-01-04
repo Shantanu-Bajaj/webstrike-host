@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark nav-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">W3BSTRIKE</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mynavbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            {{!-- <input class="form-control me-2" type="text" placeholder="Search" />
+            <button class="btn btn-primary" type="button">Search</button> --}}
+            <button type="button" onclick="userLogout()" class="btn btn-danger">Logout</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="input pt-5 border border-dark rounded-3 p-2 mt-5">
+        <div class="d-flex justify-content-center">
+          <!-- <form action="#" method="#" target="_self">
+                    <input class="input border border-dark rounded-3 p-2 mt-5" type="text" name="name" placeholder="enter your name" class="box" required>
+                    <input class="input border border-dark rounded-3 p-2 mt-5" type="email" name="email" placeholder="enter your email" class="box" required>
+                    <input class="input border border-dark rounded-3 p-2 mt-5" type="number" min="0" name="number" placeholder="enter your number" class="box" required>
+                    <textarea class="input pt-5 border border-dark rounded-3 p-2 mt-5" name="message" class="box" required placeholder="enter your message" cols="15" rows="7"></textarea>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </form> -->
+          <!--Section: Contact v.2-->
+          <section class="mb-4">
+            <!--Section heading-->
+            <h2 class="h1-responsive font-weight-bold text-center my-4">
+              Contact us
+            </h2>
+            <!--Section description-->
+            <p class="text-center w-responsive mx-auto mb-5">
+              Do you have any questions? Please do not hesitate to contact us
+              directly. Our team will come back to you within a matter of hours
+              to help you.
+            </p>
+
+            <div class="row">
+              <!--Grid column-->
+              <div class="col-md-9 mb-md-0 mb-5">
+                <form>
+                  <!--Grid row-->
+                  <div class="row">
+                    <!--Grid column-->
+                    <div class="col-md-6">
+                      <div class="md-form mb-0">
+                        <input type="text" id="name" name="name" class="form-control" />
+                        <label for="name" class="">Your name</label>
+                      </div>
+                    </div>
+                    <!--Grid column-->
+                    <!--Grid column-->
+                    <div class="col-md-6">
+                      <div class="md-form mb-0">
+                        <input type="text" id="email" name="email" class="form-control" />
+                        <label for="email" class="">Your email</label>
+                      </div>
+                    </div>
+                    <!--Grid column-->
+                  </div>
+                  <!--Grid row-->
+                  <!--Grid row-->
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="md-form mb-0">
+                        <input type="text" id="subject" name="subject" class="form-control" />
+                        <label for="subject" class="">Subject</label>
+                      </div>
+                    </div>
+                  </div>
+                  <!--Grid row-->
+                  <!--Grid row-->
+                  <div class="row">
+                    <!--Grid column-->
+                    <div class="col-md-12">
+                      <div class="md-form">
+                        <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea" ></textarea>
+                        <label for="message">Your message</label>
+                      </div>
+                    </div>
+                  </div>
+                  <!--Grid row-->
+                </form>
+
+                <div class="d-flex justify-content-center">
+                  <button id="contact" type="button" class="btn btn-primary" onclick="onSend()">Send</button>
+                </div>
+                <div class="status"></div>
+              </div>
+              <!--Grid column-->
+              <!--Grid column-->
+              <div class="col-md-3 text-center">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <i class="fas fa-map-marker-alt fa-2x"></i>
+                    <p>Aurangabad, Maharashtra, India</p>
+                  </li>
+                  <li>
+                    <i class="fas fa-phone mt-4 fa-2x"></i>
+                    <p>+91 7588400414</p>
+                  </li>
+                  <li>
+                    <i class="fas fa-envelope mt-4 fa-2x"></i>
+                    <p>contact@webstrikehost.com</p>
+                  </li>
+                </ul>
+              </div>
+              <!--Grid column-->
+            </div>
+          </section>
+          <!--Section: Contact v.2-->
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+      const formData = new FormData()
+      function onSend()
+      {
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var subject = document.getElementById('subject').value;
+        var message = document.getElementById('message').value;
+        let arr = ["name", "email", "subject", "message"]
+        let arr2 = [name, email, subject, message]
+        for(let i=0; i<4; i++)
+        {
+          formData.append(arr[i],arr2[i])
+        }
+        console.log(formData)
+        let axios_config={
+          Headers:{
+            "Content-Type": "multipart/form-data"
+            }
+        }
+        axios.post('/contact',formData,axios_config)
+        .then(response =>{
+          swal(response.data.message)
+          .then(() => {
+                    location.reload()
+            })
+        })
+        .catch(error =>{
+          console.log(error)
+        })
+      }
+    </script>
+  </body>
+
+</html>

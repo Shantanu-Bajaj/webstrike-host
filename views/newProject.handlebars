@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark nav-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="javascript:void(0)">W3BSTRIKE</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/user/dashboard">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              {{!-- <input class="form-control me-2" type="text" placeholder="Search">
+              <button class="btn btn-primary" type="button">Search</button> --}}
+              <button type="button" onclick="userLogout()" class="btn btn-danger">Logout</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+      <center><label for="name"><h1 class="text-primary pt-5">Name of the project</h1></label></center>
+        <div class="justify-content-center" style="width: 30%; margin-left: 35%;">
+            <div>     
+              <form>
+                <div class="row">
+                  <div class="col">
+                    <input type="text" id="name" class="form-control" placeholder="Name" name="name">
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+       <center> <h1 class="text-primary pt-5">Get Your Website Decentralised With IPFS!</h1></center>
+        <div class="input pt-5 border border-dark rounded-3 p-2 mt-5">
+                <div class="d-flex justify-content-center">
+                    <div>     
+                        <form method="POST" enctype= "multipart/form-data">
+                            <h2>Select a Folder </h2>
+                            <input type="file" id="folder" webkitdirectory multiple>
+                            <ul id="listing"></ul>
+                        </form>
+                    </div>
+                    <div style="width: 50%; font-size: large;">         
+                        <div class="progress mt-2" style="width:80%;height: 20px; display: none;" id="__prog_ct">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%;height: 20px;" id="__prog">
+                            <span style="font-weight: bold; font-size:medium;" id="upload_progress">10%</span> 
+                            </div>
+                        </div>
+                        <span style="color:green; display: none;" id="__success" >Uplaoded Succesfully 
+                            <br/>
+                            <span style="color:black">Your Website url: <a href="" id="__uw" target="_blank"><a></span>
+                            </span>
+                        <span style="color:red; display: none;" id="__err" >Upload failed</span>
+                    </div>
+                </div>
+        </div>
+        <br>
+                  
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+      var upload_form = document.getElementById("upload_form");
+      const formData = new FormData();
+      const __success = document.getElementById("__success");
+      const __err = document.getElementById("__err");
+      const __uw = document.getElementById("__uw");
+      const output = document.getElementById("listing");
+      const upload_progress = document.getElementById("upload_progress");
+      const __prog_ct = document.getElementById("__prog_ct");
+      const __prog = document.getElementById("__prog");
+      const axios_config = {
+      onUploadProgress: (event) => {
+        __prog_ct.style.display = "block";
+        upload_progress.style.display = "block";
+        let __cp =  Math.round((event.loaded * 100) / event.total)
+        upload_progress.innerHTML = __cp + "%";
+        __prog.style.width = __cp+"%";
+        }
+      }
+      document.getElementById("folder").addEventListener("change", (event) => {
+          var name = document.getElementById('name').value;
+          output.innerHTML = "";
+          __prog.style.width = "0%";
+          __success.style.display = "none";
+          __err.style.display = "none";
+          let files = event.target.files
+          for (const file of files) {
+              // let item = document.createElement("li");
+              // item.textContent = file.webkitRelativePath;
+              // var pf = get_file_path_and_name(file.webkitRelativePath)
+              // console.log(pf)
+              formData.append(file.webkitRelativePath, file)
+              // output.appendChild(item);
+          };
+          formData.append("project_name", name)
+          postFiles(formData)
+          // console.log(files);
+      }, false);
+
+      // function get_file_path_and_name(file){
+      //     const lastIndex = file.lastIndexOf('/');
+      //     const path = file.slice(0, lastIndex);
+          
+      //     const name = file.slice(lastIndex + 1);
+      //     return {
+      //         "path" : path,
+      //         "name" : name
+      //     }
+      // }
+      function postFiles(data)
+      {
+          console.log(data);
+          axios.post("/user/projects/upload",data, axios_config)
+          .then(response => {
+              output.innerHTML = "";
+              __success.style.display = "block";
+              let url = "ipfs://" + response.data.cid
+              __uw.href = url
+              __uw.innerHTML = url
+          })
+          .catch(error =>{
+              console.log("Ye to samasya h re baba");
+              console.error(error);
+              __err.style.display = "block";
+          })
+          .finally( () => {
+              __prog_ct.style.display = "none";
+              upload_progress.style.display = "none"
+          })
+      }
+      function userLogout()
+      {
+        axios.get("/user/logout")
+        .then(response=>{
+          swal("Logged out")
+          .then(() => {
+              window.location.href ="/"
+          })
+        })
+        .catch(error=>{
+          console.log(error)
+        })
+      }
+    </script>
+   
+</body>
+</html>
