@@ -40,5 +40,8 @@
     "start": "nodemon"
   },
   "description": "",
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=16"
+  }
 }
