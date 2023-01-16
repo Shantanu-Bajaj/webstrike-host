@@ -22,7 +22,7 @@ userRouter.get("/login", (req, res) => {
 });
 
 userRouter.post("/register", (req, res) => {
-  var sqll = "SELECT email FROM users WHERE email='" + req.body.email + "'";
+  var sqll = "SELECT email FROM final_users WHERE email='" + req.body.email + "'";
   con.query(sqll, function (err, result) {
     if (err) throw err;
     if (!result.length) {
@@ -32,7 +32,7 @@ userRouter.post("/register", (req, res) => {
           .send({ err: "Password length should be at least 6 characters" });
       } else {
         var sql =
-          "INSERT INTO users (name, email, password, phone) VALUES ('" +
+          "INSERT INTO final_users (name, email, password, phone) VALUES ('" +
           req.body.name +
           "','" +
           req.body.email +
@@ -62,12 +62,12 @@ userRouter.post("/register", (req, res) => {
 
 userRouter.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
-    var sql = "SELECT * FROM users WHERE email = '" + req.body.email + "' AND password = '" + req.body.password + "'";
+    var sql = "SELECT * FROM final_users WHERE email = '" + req.body.email + "' AND password = '" + req.body.password + "'";
     con.query(sql, function (err, result) {
       if (err) throw err;
       if (result.length) {
         let userToken = jwt.sign({ data: result[0] },process.env.USER_SECRET_KEY,{ expiresIn: 604800 });
-        var sql1 ="INSERT INTO usertoken (email, token) values ('" +req.body.email +"', '" +userToken +"')";
+        var sql1 ="INSERT INTO final_usertoken (email, token) values ('" +req.body.email +"', '" +userToken +"')";
         con.query(sql1, function (err, result) {
           if (err) throw err;
         });
@@ -155,7 +155,7 @@ userRouter.post("/projects/upload",userAuthentication, async (req, res) => {
 userRouter.get("/logout", userAuthentication, (req, res) => {
   res.clearCookie('access_token')
   var sql =
-    "DELETE FROM usertoken WHERE email='" + req.decoded.data.email + "'";
+    "DELETE FROM final_usertoken WHERE email='" + req.decoded.data.email + "'";
   con.query(sql, function (err, results) {
     if (err) throw err;
     res.status(200).send({ message: "Logged out" });
