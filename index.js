@@ -13,7 +13,6 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 80;
-const host = process.env.aws_host;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -42,6 +41,6 @@ app.post("/contact",(req,res)=>{
   })
 })
 
-app.listen(port,host,() => {
+app.listen(port,() => {
   console.log(`listening on port ${port}`);
 });
